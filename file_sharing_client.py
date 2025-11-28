@@ -525,7 +525,7 @@ header_frame.pack(fill=X, pady=(20, 10))
 # Logo/Title
 title_label = Label(
     header_frame,
-    text="ShareIt",
+    text="",
     font=("Segoe UI", 36, "bold"),
     bg=DARK_BG,
     fg=TEXT_PRIMARY
@@ -668,13 +668,13 @@ output_box.pack(fill=BOTH, expand=True)
 scrollbar.config(command=output_box.yview)
 
 # Initial welcome message
-log_message("✓ ShareIt initialized", "success")
+log_message("✓ Initialized", "success")
 log_message("→ Click 'Start Network' to begin", "info")
 
 # Footer
 footer_label = Label(
     root,
-    text="© 2025 ShareIt - Secure P2P File Sharing",
+    text="© 2025 Secure P2P File Sharing System",
     font=("Segoe UI", 8),
     bg=DARK_BG,
     fg=TEXT_SECONDARY
