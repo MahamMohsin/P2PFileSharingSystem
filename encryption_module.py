@@ -23,9 +23,8 @@ class FileEncryption:
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=self.salt,  # FIXED: Changed from 'salt' to 'self.salt'
-            iterations=100000,
-            backend=default_backend()  # FIXED: Added missing backend parameter
+            salt=self.salt,  # Change 'salt' to 'self.salt'
+            iterations=100000
         )
         key = base64.urlsafe_b64encode(kdf.derive(self.password))
         return key

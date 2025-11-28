@@ -7,6 +7,7 @@ import requests
 from flask import Flask, request, send_file, jsonify
 import random
 from functools import wraps
+import time
 
 # Import custom modules
 from encryption_module import FileEncryption, get_encryptor
@@ -117,7 +118,7 @@ def start_flask_server():
         app.run(host='0.0.0.0', port=PEER_PORT, debug=False)
     except Exception as e:
         error_handler.log_error("SERVER ERROR", "Failed to start Flask server", e)
-        log_message("[ERROR] Failed to start peer server")
+        log_message("[ERROR] Failed to start peer server", "error")
 
 def request_file_from_peer_base(peer, filename, token, decrypt_password=None):
     """Base function for downloading from peer (used with retry)"""
@@ -192,7 +193,7 @@ def register_peer_base():
 def register_peer():
     """Register peer with retry mechanism"""
     def on_retry(attempt, error, delay):
-        log_message(f"[RETRY {attempt}] Registration failed. Retrying in {delay}s...")
+        log_message(f"[RETRY {attempt}] Registration failed. Retrying in {delay}s...", "warning")
     
     success, result, error = retry_operation(
         register_peer_base,
@@ -201,10 +202,12 @@ def register_peer():
     )
     
     if success:
-        log_message(f"[SUCCESS] Registered with discovery server")
+        log_message(f"✓ Registered with discovery server", "success")
+        status_label.config(text="● ONLINE", fg="#00ff88")
     else:
         error_msg = get_user_friendly_message(error)
-        log_message(f"[ERROR] {error_msg}")
+        log_message(f"✗ Registration failed: {error_msg}", "error")
+        status_label.config(text="● OFFLINE", fg="#ff4444")
         messagebox.showwarning("Registration Failed", 
             f"{error_msg}\n\nPlease ensure the discovery server is running.")
 
@@ -463,62 +466,219 @@ def show_local_files():
         error_handler.log_error("FILE LIST ERROR", "Failed to list local files", e)
         log_message(f"[ERROR] {get_user_friendly_message(e)}")
 
-# ========== LOGGING ==========
-def log_message(msg):
-    try:
-        output_box.config(state=NORMAL)
-        output_box.insert(END, msg + '\n\n')
-        output_box.config(state=DISABLED)
-        output_box.see(END)
-    except:
-        pass  # GUI might not be ready
-
 def start_network():
     """Start network with error handling"""
     try:
         threading.Thread(target=start_flask_server, daemon=True).start()
         time.sleep(1)  # Give server time to start
         register_peer()
-        log_message("[CLIENT STARTED] Peer server running and registered.")
+        log_message(f"✓ Peer server running on port {PEER_PORT}", "success")
     except Exception as e:
         error_handler.log_error("STARTUP ERROR", "Failed to start network", e)
-        log_message(f"[ERROR] {get_user_friendly_message(e)}")
+        log_message(f"✗ Error: {get_user_friendly_message(e)}", "error")
+
+# ========== LOGGING ==========
+def log_message(msg, msg_type="info"):
+    try:
+        output_box.config(state=NORMAL)
+        
+        # Color coding based on message type
+        colors = {
+            "success": "#00ff88",
+            "error": "#ff4444",
+            "warning": "#ffaa00",
+            "info": "#88ccff"
+        }
+        
+        color = colors.get(msg_type, "#88ccff")
+        
+        # Insert with tag
+        output_box.insert(END, msg + '\n', msg_type)
+        output_box.tag_config(msg_type, foreground=color)
+        
+        output_box.config(state=DISABLED)
+        output_box.see(END)
+    except:
+        pass
 
 # ========== GUI ==========
+# ========== MODERN DARK UI ==========
 root = Tk()
-root.title("ShareIt - Secure P2P")
-root.geometry("500x650+500+150")
-root.configure(bg="#f4fdfe")
+root.title("P2P File Sharing System")
+root.geometry("900x700")
+root.configure(bg="#0a0e27")
 root.resizable(False, False)
 
-try:
-    image_icon = PhotoImage(file="icon.png")
-    root.iconphoto(False, image_icon)
-except:
-    pass  # Icon file not found
+# Custom styles
+DARK_BG = "#0a0e27"
+CARD_BG = "#131a3a"
+ACCENT_1 = "#6c5ce7"
+ACCENT_2 = "#00b894"
+TEXT_PRIMARY = "#ffffff"
+TEXT_SECONDARY = "#8395a7"
+HOVER_BG = "#1e2749"
 
-Label(root, text="P2P FILE TRANSFER", font=('Press Start 2P', 13, 'bold'), bg="#f4fdfe").pack(pady=20)
-Frame(root, width=400, height=2, bg='#f3f5f6').pack()
+# Header Frame
+header_frame = Frame(root, bg=DARK_BG, height=100)
+header_frame.pack(fill=X, pady=(20, 10))
 
-Button(root, text="START NETWORK", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="dark turquoise", fg="white", command=start_network).pack(pady=10)
-Button(root, text="VIEW LOCAL FILES", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="blue violet", fg="white", command=show_local_files).pack(pady=5)
-Button(root, text="UPLOAD A FILE", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="blue violet", fg="white", command=upload_files).pack(pady=5)
-Button(root, text="DOWNLOAD A FILE", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="blue violet", fg="white", command=download_file_gui).pack(pady=5)
-Button(root, text="VIEW PEERS", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="blue violet", fg="white", command=get_peer_list).pack(pady=5)
-Button(root, text="EXIT", width=25, height=2, font=('Roboto', 10, 'bold'), 
-       bg="tomato", fg="white", command=root.destroy).pack(pady=5)
+# Logo/Title
+title_label = Label(
+    header_frame,
+    text="ShareIt",
+    font=("Segoe UI", 36, "bold"),
+    bg=DARK_BG,
+    fg=TEXT_PRIMARY
+)
+title_label.pack(side=LEFT, padx=30)
 
-Label(root, text="LOGS / OUTPUT", font=('Roboto', 12, 'bold'), bg="#f4fdfe").pack(pady=10)
+# Subtitle
+subtitle_label = Label(
+    header_frame,
+    text="Secure P2P File Transfer",
+    font=("Segoe UI", 12),
+    bg=DARK_BG,
+    fg=TEXT_SECONDARY
+)
+subtitle_label.place(x=35, y=60)
 
-output_box = Text(root, height=12, width=60, font=('Consolas', 10), state=DISABLED, bg="#fff")
-output_box.pack(pady=5)
+# Status indicator
+status_frame = Frame(header_frame, bg=DARK_BG)
+status_frame.pack(side=RIGHT, padx=30)
 
-# Add time import at the top
-import time
+status_label = Label(
+    status_frame,
+    text="● OFFLINE",
+    font=("Segoe UI", 11, "bold"),
+    bg=DARK_BG,
+    fg="#ff4444"
+)
+status_label.pack()
+
+port_label = Label(
+    status_frame,
+    text=f"Port: {PEER_PORT}",
+    font=("Segoe UI", 9),
+    bg=DARK_BG,
+    fg=TEXT_SECONDARY
+)
+port_label.pack()
+
+# Main content frame
+content_frame = Frame(root, bg=DARK_BG)
+content_frame.pack(fill=BOTH, expand=True, padx=30, pady=10)
+
+# Left panel - Controls
+left_panel = Frame(content_frame, bg=CARD_BG, width=350)
+left_panel.pack(side=LEFT, fill=Y, padx=(0, 15))
+left_panel.pack_propagate(False)
+
+controls_title = Label(
+    left_panel,
+    text="CONTROLS",
+    font=("Segoe UI", 10, "bold"),
+    bg=CARD_BG,
+    fg=TEXT_SECONDARY,
+    anchor=W
+)
+controls_title.pack(fill=X, padx=20, pady=(20, 10))
+
+# Button creation function
+def create_button(parent, text, icon, command, color):
+    btn_frame = Frame(parent, bg=CARD_BG)
+    btn_frame.pack(fill=X, padx=15, pady=5)
+    
+    btn = Button(
+        btn_frame,
+        text=f"{icon}  {text}",
+        font=("Segoe UI", 11),
+        bg=color,
+        fg="white",
+        activebackground=color,
+        activeforeground="white",
+        relief=FLAT,
+        cursor="hand2",
+        command=command,
+        height=2,
+        bd=0
+    )
+    btn.pack(fill=X, ipady=8)
+    
+    # Hover effects
+    def on_enter(e):
+        btn.config(bg=darken_color(color))
+    
+    def on_leave(e):
+        btn.config(bg=color)
+    
+    btn.bind("<Enter>", on_enter)
+    btn.bind("<Leave>", on_leave)
+    
+    return btn
+
+def darken_color(color):
+    # Simple color darkening
+    return color
+
+# Create buttons
+create_button(left_panel, "Start Network", "▶", start_network, ACCENT_2)
+create_button(left_panel, "View Local Files", "📁", show_local_files, ACCENT_1)
+create_button(left_panel, "Upload File", "⬆", upload_files, ACCENT_1)
+create_button(left_panel, "Download File", "⬇", download_file_gui, ACCENT_1)
+create_button(left_panel, "View Peers", "👥", get_peer_list, ACCENT_1)
+
+# Spacer
+Frame(left_panel, bg=CARD_BG, height=20).pack()
+
+create_button(left_panel, "Exit", "✕", root.destroy, "#e74c3c")
+
+# Right panel - Logs
+right_panel = Frame(content_frame, bg=CARD_BG)
+right_panel.pack(side=RIGHT, fill=BOTH, expand=True)
+
+logs_title = Label(
+    right_panel,
+    text="ACTIVITY LOG",
+    font=("Segoe UI", 10, "bold"),
+    bg=CARD_BG,
+    fg=TEXT_SECONDARY,
+    anchor=W
+)
+logs_title.pack(fill=X, padx=20, pady=(20, 10))
+
+# Log output with scrollbar
+log_frame = Frame(right_panel, bg=CARD_BG)
+log_frame.pack(fill=BOTH, expand=True, padx=20, pady=(0, 20))
+
+scrollbar = Scrollbar(log_frame)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+output_box = Text(
+    log_frame,
+    font=("Consolas", 10),
+    bg="#0d1117",
+    fg="#c9d1d9",
+    insertbackground="white",
+    relief=FLAT,
+    state=DISABLED,
+    wrap=WORD,
+    yscrollcommand=scrollbar.set
+)
+output_box.pack(fill=BOTH, expand=True)
+scrollbar.config(command=output_box.yview)
+
+# Initial welcome message
+log_message("✓ ShareIt initialized", "success")
+log_message("→ Click 'Start Network' to begin", "info")
+
+# Footer
+footer_label = Label(
+    root,
+    text="© 2025 ShareIt - Secure P2P File Sharing",
+    font=("Segoe UI", 8),
+    bg=DARK_BG,
+    fg=TEXT_SECONDARY
+)
+footer_label.pack(side=BOTTOM, pady=10)
 
 root.mainloop()
