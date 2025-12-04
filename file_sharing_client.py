@@ -121,7 +121,6 @@ def start_flask_server():
         log_message("[ERROR] Failed to start peer server", "error")
 
 def request_file_from_peer_base(peer, filename, token, decrypt_password=None):
-    """Base function for downloading from peer (used with retry)"""
     url = f"http://{peer}/download/{filename}"
     headers = {"Authorization": token}
     
@@ -156,7 +155,6 @@ def request_file_from_peer_base(peer, filename, token, decrypt_password=None):
         raise Exception(f"Download failed: {error_msg}")
 
 def request_file_from_peer(peer, filename, token, decrypt_password=None):
-    """Download file with retry mechanism"""
     def on_retry(attempt, error, delay):
         log_message(f"[RETRY {attempt}] Download failed. Retrying in {delay}s...")
     
@@ -175,7 +173,6 @@ def request_file_from_peer(peer, filename, token, decrypt_password=None):
         messagebox.showerror("Download Failed", error_msg)
 
 def register_peer_base():
-    """Base function for peer registration (used with retry)"""
     peer_address = f"127.0.0.1:{PEER_PORT}"
     
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -191,7 +188,6 @@ def register_peer_base():
     return response
 
 def register_peer():
-    """Register peer with retry mechanism"""
     def on_retry(attempt, error, delay):
         log_message(f"[RETRY {attempt}] Registration failed. Retrying in {delay}s...", "warning")
     
@@ -212,7 +208,6 @@ def register_peer():
             f"{error_msg}\n\nPlease ensure the discovery server is running.")
 
 def get_peer_list():
-    """Get list of active peers with error handling"""
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.settimeout(10)
@@ -256,7 +251,6 @@ def get_peer_list():
 
 # ========== FILE ACTIONS WITH ENCRYPTION & RETRY ==========
 def upload_files():
-    """Upload file with encryption and retry"""
     global encryptor
     
     try:
@@ -369,7 +363,6 @@ def upload_files():
         messagebox.showerror("Error", get_user_friendly_message(e))
 
 def download_file_gui():
-    """Download file with decryption and retry"""
     try:
         peers = get_peer_list()
         if not peers:
@@ -455,7 +448,6 @@ def download_file_gui():
         messagebox.showerror("Error", get_user_friendly_message(e))
 
 def show_local_files():
-    """Show local files with error handling"""
     try:
         files = os.listdir(FILES_DIR)
         if files:
@@ -502,7 +494,6 @@ def log_message(msg, msg_type="info"):
         pass
 
 # ========== GUI ==========
-# ========== MODERN DARK UI ==========
 root = Tk()
 root.title("P2P File Sharing System")
 root.geometry("900x700")

@@ -1,7 +1,4 @@
 # error_handler.py
-"""
-Centralized error handling module for P2P file transfer
-"""
 
 import logging
 import traceback
@@ -21,28 +18,21 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class P2PError(Exception):
-    """Base exception for P2P operations"""
     pass
 
 class NetworkError(P2PError):
-    """Network-related errors"""
     pass
 
 class FileError(P2PError):
-    """File operation errors"""
     pass
 
 class AuthenticationError(P2PError):
-    """Authentication-related errors"""
     pass
 
 class EncryptionError(P2PError):
-    """Encryption/Decryption errors"""
     pass
 
 class ErrorHandler:
-    """Centralized error handling and logging"""
-    
     @staticmethod
     def log_error(error_type, message, exception=None):
         """Log error with details"""
@@ -68,7 +58,6 @@ class ErrorHandler:
     
     @staticmethod
     def handle_network_error(func):
-        """Decorator for handling network errors"""
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
@@ -98,7 +87,6 @@ class ErrorHandler:
     
     @staticmethod
     def handle_file_error(func):
-        """Decorator for handling file operation errors"""
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
@@ -135,7 +123,6 @@ class ErrorHandler:
     
     @staticmethod
     def handle_auth_error(func):
-        """Decorator for handling authentication errors"""
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
@@ -153,7 +140,6 @@ class ErrorHandler:
     
     @staticmethod
     def handle_encryption_error(func):
-        """Decorator for handling encryption/decryption errors"""
         @wraps(func)
         def wrapper(*args, **kwargs):
             try:
@@ -169,10 +155,6 @@ class ErrorHandler:
     
     @staticmethod
     def safe_execute(func, *args, default_return=None, error_callback=None, **kwargs):
-        """
-        Safely execute a function with error handling
-        Returns: (success: bool, result: any, error_message: str)
-        """
         try:
             result = func(*args, **kwargs)
             return True, result, None
@@ -187,7 +169,6 @@ class ErrorHandler:
             return False, default_return, error_msg
 
 def get_user_friendly_message(error):
-    """Convert technical errors to user-friendly messages"""
     error_str = str(error).lower()
     
     if "connection" in error_str or "network" in error_str:

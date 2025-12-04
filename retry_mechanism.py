@@ -1,14 +1,10 @@
 # retry_mechanism.py
-"""
-Retry mechanism for failed upload/download operations
-"""
 
 import time
 import functools
 from error_handler import ErrorHandler, NetworkError
 
 class RetryConfig:
-    """Configuration for retry mechanism"""
     def __init__(self, max_attempts=3, base_delay=1, max_delay=10, backoff_factor=2):
         self.max_attempts = max_attempts
         self.base_delay = base_delay
@@ -16,23 +12,12 @@ class RetryConfig:
         self.backoff_factor = backoff_factor
 
 class RetryMechanism:
-    """Handles retry logic for failed operations"""
     
     def __init__(self, config=None):
         self.config = config or RetryConfig()
         self.error_handler = ErrorHandler()
     
     def retry_with_backoff(self, func, *args, on_retry_callback=None, **kwargs):
-        """
-        Retry a function with exponential backoff
-        
-        Args:
-            func: Function to retry
-            on_retry_callback: Callback function(attempt, error, delay) called on each retry
-        
-        Returns:
-            Tuple (success: bool, result: any, error: str)
-        """
         last_exception = None
         
         for attempt in range(1, self.config.max_attempts + 1):
@@ -81,14 +66,6 @@ class RetryMechanism:
         return False, None, str(last_exception)
     
     def retry_decorator(self, max_attempts=None, on_retry_callback=None):
-        """
-        Decorator for automatic retry functionality
-        
-        Usage:
-            @retry_mechanism.retry_decorator(max_attempts=3)
-            def my_function():
-                # function code
-        """
         def decorator(func):
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
@@ -115,28 +92,9 @@ class RetryMechanism:
 default_retry = RetryMechanism()
 
 def retry_operation(func, *args, max_attempts=3, on_retry=None, **kwargs):
-    """
-    Convenient function to retry an operation
-    
-    Args:
-        func: Function to execute
-        max_attempts: Maximum number of retry attempts
-        on_retry: Callback function for retry events
-    
-    Returns:
-        Tuple (success: bool, result: any, error: str)
-    """
     config = RetryConfig(max_attempts=max_attempts)
     retry_mech = RetryMechanism(config)
     return retry_mech.retry_with_backoff(func, *args, on_retry_callback=on_retry, **kwargs)
 
 def with_retry(max_attempts=3):
-    """
-    Decorator for adding retry functionality to any function
-    
-    Usage:
-        @with_retry(max_attempts=5)
-        def upload_file(path):
-            # upload logic
-    """
     return default_retry.retry_decorator(max_attempts=max_attempts)

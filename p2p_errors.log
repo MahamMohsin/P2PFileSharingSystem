@@ -1,0 +1,106 @@
+2025-12-04 13:27:51,630 - INFO - Starting Flask server on port 8658
+2025-12-04 13:27:52,631 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 13:27:52,878 - WARNING - Attempt 1 failed for register_peer_base. Retrying in 1 seconds... Error: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-12-04 13:27:53,881 - INFO - Attempt 2/3 for register_peer_base
+2025-12-04 13:27:55,932 - WARNING - Attempt 2 failed for register_peer_base. Retrying in 2 seconds... Error: [WinError 10061] No connection could be made because the target machine actively refused it
+2025-12-04 13:27:57,936 - INFO - Attempt 3/3 for register_peer_base
+2025-12-04 13:27:59,981 - ERROR - [2025-12-04 13:27:59] RETRY EXHAUSTED: All 3 attempts failed for register_peer_base
+Exception: [WinError 10061] No connection could be made because the target machine actively refused it
+Traceback: Traceback (most recent call last):
+  File "C:\Users\nehdi\OneDrive\Desktop\P2PFileSharingSystem\retry_mechanism.py", line 44, in retry_with_backoff
+    result = func(*args, **kwargs)
+  File "C:\Users\nehdi\OneDrive\Desktop\P2PFileSharingSystem\file_sharing_client.py", line 183, in register_peer_base
+    s.connect((DISCOVERY_SERVER, DISCOVERY_PORT))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+2025-12-04 13:28:04,442 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8658
+ * Running on http://10.243.123.70:8658
+2025-12-04 13:28:04,444 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 13:28:20,862 - INFO - Starting Flask server on port 8658
+2025-12-04 13:28:21,864 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 13:28:22,272 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8658
+ * Running on http://10.243.123.70:8658
+2025-12-04 13:28:22,274 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 13:28:25,958 - INFO - Starting Flask server on port 8652
+2025-12-04 13:28:26,872 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8652
+ * Running on http://10.243.123.70:8652
+2025-12-04 13:28:26,874 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 13:28:26,959 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 13:29:09,229 - INFO - Attempt 1/3 for upload_attempt
+2025-12-04 13:29:09,309 - INFO - Encrypted file 'closest_pair_of_points.py.encrypted' uploaded successfully
+2025-12-04 13:29:09,315 - INFO - 127.0.0.1 - - [04/Dec/2025 13:29:09] "POST /upload HTTP/1.1" 200 -
+2025-12-04 13:29:24,825 - INFO - File list requested: 1 files
+2025-12-04 13:29:24,828 - INFO - 127.0.0.1 - - [04/Dec/2025 13:29:24] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:29:36,964 - INFO - File list requested: 1 files
+2025-12-04 13:29:36,966 - INFO - 127.0.0.1 - - [04/Dec/2025 13:29:36] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:29:42,945 - INFO - File list requested: 1 files
+2025-12-04 13:29:42,951 - INFO - 127.0.0.1 - - [04/Dec/2025 13:29:42] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:30:01,019 - INFO - Attempt 1/3 for request_file_from_peer_base
+2025-12-04 13:30:01,069 - INFO - File 'closest_pair_of_points.py.encrypted' downloaded by peer
+2025-12-04 13:30:01,270 - INFO - 127.0.0.1 - - [04/Dec/2025 13:30:01] "GET /download/closest_pair_of_points.py.encrypted HTTP/1.1" 200 -
+2025-12-04 13:30:01,447 - INFO - File decrypted: closest_pair_of_points.py.encrypted
+2025-12-04 13:30:10,715 - INFO - File list requested: 1 files
+2025-12-04 13:30:10,718 - INFO - 127.0.0.1 - - [04/Dec/2025 13:30:10] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:31:12,519 - INFO - Attempt 1/3 for upload_attempt
+2025-12-04 13:31:12,571 - INFO - Encrypted file 'closest_pair_1.txt.encrypted' uploaded successfully
+2025-12-04 13:31:12,573 - INFO - 127.0.0.1 - - [04/Dec/2025 13:31:12] "POST /upload HTTP/1.1" 200 -
+2025-12-04 13:31:41,463 - INFO - File list requested: 2 files
+2025-12-04 13:31:41,465 - INFO - 127.0.0.1 - - [04/Dec/2025 13:31:41] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:31:44,907 - WARNING - Unauthorized access attempt from 127.0.0.1
+2025-12-04 13:31:44,911 - INFO - 127.0.0.1 - - [04/Dec/2025 13:31:44] "[31m[1mGET /files HTTP/1.1[0m" 401 -
+2025-12-04 13:31:53,673 - INFO - File list requested: 2 files
+2025-12-04 13:31:53,676 - INFO - 127.0.0.1 - - [04/Dec/2025 13:31:53] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:31:59,601 - INFO - File list requested: 2 files
+2025-12-04 13:31:59,603 - INFO - 127.0.0.1 - - [04/Dec/2025 13:31:59] "GET /files HTTP/1.1" 200 -
+2025-12-04 13:32:12,974 - INFO - Attempt 1/3 for request_file_from_peer_base
+2025-12-04 13:32:13,056 - INFO - File 'closest_pair_1.txt.encrypted' downloaded by peer
+2025-12-04 13:32:13,399 - INFO - 127.0.0.1 - - [04/Dec/2025 13:32:13] "GET /download/closest_pair_1.txt.encrypted HTTP/1.1" 200 -
+2025-12-04 13:32:13,553 - INFO - File decrypted: closest_pair_1.txt.encrypted
+2025-12-04 15:00:22,311 - INFO - Starting Flask server on port 8672
+2025-12-04 15:00:23,312 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 15:00:24,114 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8672
+ * Running on http://10.243.123.70:8672
+2025-12-04 15:00:24,115 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 15:00:25,911 - INFO - Starting Flask server on port 8021
+2025-12-04 15:00:26,913 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 15:00:26,984 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8021
+ * Running on http://10.243.123.70:8021
+2025-12-04 15:00:26,986 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 15:03:18,214 - INFO - Starting Flask server on port 8606
+2025-12-04 15:03:19,214 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 15:03:19,562 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8606
+ * Running on http://10.243.123.70:8606
+2025-12-04 15:03:19,563 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 15:03:20,740 - INFO - Starting Flask server on port 8138
+2025-12-04 15:03:21,637 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8138
+ * Running on http://10.243.123.70:8138
+2025-12-04 15:03:21,638 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-04 15:03:21,740 - INFO - Attempt 1/3 for register_peer_base
+2025-12-04 15:04:15,698 - INFO - Attempt 1/3 for upload_attempt
+2025-12-04 15:04:15,734 - INFO - Encrypted file 'closest_pair_2.txt.encrypted' uploaded successfully
+2025-12-04 15:04:15,737 - INFO - 127.0.0.1 - - [04/Dec/2025 15:04:15] "POST /upload HTTP/1.1" 200 -
+2025-12-04 15:04:25,109 - INFO - File list requested: 3 files
+2025-12-04 15:04:25,111 - INFO - 127.0.0.1 - - [04/Dec/2025 15:04:25] "GET /files HTTP/1.1" 200 -
+2025-12-04 15:04:30,505 - INFO - File list requested: 3 files
+2025-12-04 15:04:30,507 - INFO - 127.0.0.1 - - [04/Dec/2025 15:04:30] "GET /files HTTP/1.1" 200 -
+2025-12-04 15:05:07,406 - INFO - Attempt 1/3 for request_file_from_peer_base
+2025-12-04 15:05:07,424 - INFO - File 'closest_pair_2.txt.encrypted' downloaded by peer
+2025-12-04 15:05:07,653 - INFO - 127.0.0.1 - - [04/Dec/2025 15:05:07] "GET /download/closest_pair_2.txt.encrypted HTTP/1.1" 200 -
+2025-12-04 15:05:07,845 - INFO - File decrypted: closest_pair_2.txt.encrypted
+2025-12-04 15:05:56,045 - INFO - File list requested: 3 files
+2025-12-04 15:05:56,048 - INFO - 127.0.0.1 - - [04/Dec/2025 15:05:56] "GET /files HTTP/1.1" 200 -
